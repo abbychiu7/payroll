@@ -101,6 +101,7 @@ export class PaymentComponent implements OnInit {
   protected queryBackend(): Observable<EntityArrayResponseType> {
     this.isLoading = true;
     const queryObject: any = {
+      eagerload: true,
       sort: this.sortService.buildSortParam(this.sortState()),
     };
     return this.paymentService.query(queryObject).pipe(tap(() => (this.isLoading = false)));

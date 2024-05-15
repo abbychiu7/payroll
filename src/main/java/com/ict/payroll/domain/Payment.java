@@ -1,5 +1,6 @@
 package com.ict.payroll.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import org.hibernate.annotations.Cache;
@@ -35,6 +36,10 @@ public class Payment implements Serializable {
 
     @Column(name = "net_pay")
     private Double netPay;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "payments" }, allowSetters = true)
+    private Employee employee;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -114,6 +119,19 @@ public class Payment implements Serializable {
 
     public void setNetPay(Double netPay) {
         this.netPay = netPay;
+    }
+
+    public Employee getEmployee() {
+        return this.employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Payment employee(Employee employee) {
+        this.setEmployee(employee);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

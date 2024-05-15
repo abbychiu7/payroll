@@ -148,12 +148,17 @@ public class PaymentResource {
     /**
      * {@code GET  /payments} : get all the payments.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of payments in body.
      */
     @GetMapping("")
-    public List<Payment> getAllPayments() {
+    public List<Payment> getAllPayments(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Payments");
-        return paymentRepository.findAll();
+        if (eagerload) {
+            return paymentRepository.findAllWithEagerRelationships();
+        } else {
+            return paymentRepository.findAll();
+        }
     }
 
     /**
@@ -165,7 +170,7 @@ public class PaymentResource {
     @GetMapping("/{id}")
     public ResponseEntity<Payment> getPayment(@PathVariable("id") Long id) {
         log.debug("REST request to get Payment : {}", id);
-        Optional<Payment> payment = paymentRepository.findById(id);
+        Optional<Payment> payment = paymentRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(payment);
     }
 

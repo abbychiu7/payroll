@@ -23,6 +23,7 @@ type PaymentFormGroupContent = {
   monthlySalary: FormControl<IPayment['monthlySalary']>;
   deductions: FormControl<IPayment['deductions']>;
   netPay: FormControl<IPayment['netPay']>;
+  employee: FormControl<IPayment['employee']>;
 };
 
 export type PaymentFormGroup = FormGroup<PaymentFormGroupContent>;
@@ -47,6 +48,7 @@ export class PaymentFormService {
       monthlySalary: new FormControl(paymentRawValue.monthlySalary),
       deductions: new FormControl(paymentRawValue.deductions),
       netPay: new FormControl(paymentRawValue.netPay),
+      employee: new FormControl(paymentRawValue.employee),
     });
   }
 

@@ -35,6 +35,14 @@
           <dd>
             <span>{{ payment()!.netPay }}</span>
           </dd>
+          <dt><span>Employee</span></dt>
+          <dd>
+            @if (payment()!.employee) {
+              <div>
+                <a [routerLink]="['/employee', payment()!.employee?.id, 'view']">{{ payment()!.employee?.name }}</a>
+              </div>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

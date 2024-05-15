@@ -25,6 +25,7 @@ describe('Payment Form Service', () => {
             monthlySalary: expect.any(Object),
             deductions: expect.any(Object),
             netPay: expect.any(Object),
+            employee: expect.any(Object),
           }),
         );
       });
@@ -40,6 +41,7 @@ describe('Payment Form Service', () => {
             monthlySalary: expect.any(Object),
             deductions: expect.any(Object),
             netPay: expect.any(Object),
+            employee: expect.any(Object),
           }),
         );
       });

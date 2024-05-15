@@ -5,6 +5,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject, from } from 'rxjs';
 
+import { IEmployee } from 'app/entities/employee/employee.model';
+import { EmployeeService } from 'app/entities/employee/service/employee.service';
 import { PaymentService } from '../service/payment.service';
 import { IPayment } from '../payment.model';
 import { PaymentFormService } from './payment-form.service';
@@ -17,6 +19,7 @@ describe('Payment Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let paymentFormService: PaymentFormService;
   let paymentService: PaymentService;
+  let employeeService: EmployeeService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,17 +41,43 @@ describe('Payment Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     paymentFormService = TestBed.inject(PaymentFormService);
     paymentService = TestBed.inject(PaymentService);
+    employeeService = TestBed.inject(EmployeeService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
+    it('Should call Employee query and add missing value', () => {
       const payment: IPayment = { id: 456 };
+      const employee: IEmployee = { id: 18059 };
+      payment.employee = employee;
+
+      const employeeCollection: IEmployee[] = [{ id: 18068 }];
+      jest.spyOn(employeeService, 'query').mockReturnValue(of(new HttpResponse({ body: employeeCollection })));
+      const additionalEmployees = [employee];
+      const expectedCollection: IEmployee[] = [...additionalEmployees, ...employeeCollection];
+      jest.spyOn(employeeService, 'addEmployeeToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ payment });
       comp.ngOnInit();
 
+      expect(employeeService.query).toHaveBeenCalled();
+      expect(employeeService.addEmployeeToCollectionIfMissing).toHaveBeenCalledWith(
+        employeeCollection,
+        ...additionalEmployees.map(expect.objectContaining),
+      );
+      expect(comp.employeesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const payment: IPayment = { id: 456 };
+      const employee: IEmployee = { id: 23942 };
+      payment.employee = employee;
+
+      activatedRoute.data = of({ payment });
+      comp.ngOnInit();
+
+      expect(comp.employeesSharedCollection).toContain(employee);
       expect(comp.payment).toEqual(payment);
     });
   });
@@ -118,6 +147,18 @@ describe('Payment Management Update Component', () => {
       expect(paymentService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareEmployee', () => {
+      it('Should forward to employeeService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(employeeService, 'compareEmployee');
+        comp.compareEmployee(entity, entity2);
+        expect(employeeService.compareEmployee).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

@@ -4,6 +4,7 @@ import static com.ict.payroll.domain.PaymentAsserts.*;
 import static com.ict.payroll.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -12,12 +13,18 @@ import com.ict.payroll.IntegrationTest;
 import com.ict.payroll.domain.Payment;
 import com.ict.payroll.repository.PaymentRepository;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link PaymentResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class PaymentResourceIT {
@@ -57,6 +65,9 @@ class PaymentResourceIT {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Mock
+    private PaymentRepository paymentRepositoryMock;
 
     @Autowired
     private EntityManager em;
@@ -157,6 +168,23 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].monthlySalary").value(hasItem(DEFAULT_MONTHLY_SALARY.doubleValue())))
             .andExpect(jsonPath("$.[*].deductions").value(hasItem(DEFAULT_DEDUCTIONS.doubleValue())))
             .andExpect(jsonPath("$.[*].netPay").value(hasItem(DEFAULT_NET_PAY.doubleValue())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPaymentsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(paymentRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPaymentMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(paymentRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPaymentsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(paymentRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPaymentMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(paymentRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test

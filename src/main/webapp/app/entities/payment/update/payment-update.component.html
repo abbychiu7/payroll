@@ -51,6 +51,23 @@
           <label class="form-label" for="field_netPay">Net Pay</label>
           <input type="number" class="form-control" name="netPay" id="field_netPay" data-cy="netPay" formControlName="netPay" />
         </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_employee">Employee</label>
+          <select
+            class="form-control"
+            id="field_employee"
+            data-cy="employee"
+            name="employee"
+            formControlName="employee"
+            [compareWith]="compareEmployee"
+          >
+            <option [ngValue]="null"></option>
+            @for (employeeOption of employeesSharedCollection; track $index) {
+              <option [ngValue]="employeeOption">{{ employeeOption.name }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div>

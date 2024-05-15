@@ -60,5 +60,9 @@ public class PaymentAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertPaymentUpdatableRelationshipsEquals(Payment expected, Payment actual) {}
+    public static void assertPaymentUpdatableRelationshipsEquals(Payment expected, Payment actual) {
+        assertThat(expected)
+            .as("Verify Payment relationships")
+            .satisfies(e -> assertThat(e.getEmployee()).as("check employee").isEqualTo(actual.getEmployee()));
+    }
 }

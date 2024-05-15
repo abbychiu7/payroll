@@ -1,7 +1,10 @@
 package com.ict.payroll.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -32,6 +35,11 @@ public class Employee implements Serializable {
 
     @Column(name = "monthly_salary")
     private Double monthlySalary;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "employee" }, allowSetters = true)
+    private Set<Payment> payments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -98,6 +106,37 @@ public class Employee implements Serializable {
 
     public void setMonthlySalary(Double monthlySalary) {
         this.monthlySalary = monthlySalary;
+    }
+
+    public Set<Payment> getPayments() {
+        return this.payments;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        if (this.payments != null) {
+            this.payments.forEach(i -> i.setEmployee(null));
+        }
+        if (payments != null) {
+            payments.forEach(i -> i.setEmployee(this));
+        }
+        this.payments = payments;
+    }
+
+    public Employee payments(Set<Payment> payments) {
+        this.setPayments(payments);
+        return this;
+    }
+
+    public Employee addPayment(Payment payment) {
+        this.payments.add(payment);
+        payment.setEmployee(this);
+        return this;
+    }
+
+    public Employee removePayment(Payment payment) {
+        this.payments.remove(payment);
+        payment.setEmployee(null);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
