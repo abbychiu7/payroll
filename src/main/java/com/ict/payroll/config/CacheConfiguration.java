@@ -51,6 +51,7 @@ public class CacheConfiguration {
             createCache(cm, com.ict.payroll.domain.Authority.class.getName());
             createCache(cm, com.ict.payroll.domain.User.class.getName() + ".authorities");
             createCache(cm, com.ict.payroll.domain.Employee.class.getName());
+            createCache(cm, com.ict.payroll.domain.Payment.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,0 +1,73 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-payment-heading" data-cy="PaymentCreateUpdateHeading">Create or edit a Payment</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_payMonth">Pay Month</label>
+          <input type="number" class="form-control" name="payMonth" id="field_payMonth" data-cy="payMonth" formControlName="payMonth" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_payYear">Pay Year</label>
+          <input type="number" class="form-control" name="payYear" id="field_payYear" data-cy="payYear" formControlName="payYear" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_monthlySalary">Monthly Salary</label>
+          <input
+            type="number"
+            class="form-control"
+            name="monthlySalary"
+            id="field_monthlySalary"
+            data-cy="monthlySalary"
+            formControlName="monthlySalary"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_deductions">Deductions</label>
+          <input
+            type="number"
+            class="form-control"
+            name="deductions"
+            id="field_deductions"
+            data-cy="deductions"
+            formControlName="deductions"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_netPay">Net Pay</label>
+          <input type="number" class="form-control" name="netPay" id="field_netPay" data-cy="netPay" formControlName="netPay" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

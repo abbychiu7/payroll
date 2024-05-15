@@ -1,22 +1,22 @@
 import { IEmployee, NewEmployee } from './employee.model';
 
 export const sampleWithRequiredData: IEmployee = {
-  id: 27101,
+  id: 27629,
 };
 
 export const sampleWithPartialData: IEmployee = {
-  id: 9871,
-  position: 'amidst seriously where',
-  department: 'ack support gracefully',
-  monthlySalary: 17310.19,
+  id: 23691,
+  name: 'supervise ajar even',
+  position: 'pay',
+  department: 'subprime duh anxiously',
 };
 
 export const sampleWithFullData: IEmployee = {
-  id: 16146,
-  name: 'down',
-  position: 'solidly silently',
-  department: 'defenseless',
-  monthlySalary: 26680.96,
+  id: 12477,
+  name: 'until pace righteously',
+  position: 'atop',
+  department: 'pepper',
+  monthlySalary: 5116.98,
 };
 
 export const sampleWithNewData: NewEmployee = {

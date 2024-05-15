@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20240515120056"
+  },
+  "fields": [
+    {
+      "fieldName": "payMonth",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "payYear",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "monthlySalary",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "deductions",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "netPay",
+      "fieldType": "Double"
+    }
+  ],
+  "name": "Payment",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "no"
+}
